@@ -3,7 +3,7 @@
 class Router
 {
     private $routes = [];
-
+    
     public function setGet($url, $controller, $method)
     {
         $this->routes[$url] = [$controller, $method];
@@ -13,9 +13,8 @@ class Router
     {
         $url = $this->parse($url);
         
-        //make sure there is a route specified for this url
-        if(array_key_exists($url, $this->routes) === false) {
-            return "404 not found";
+        if($this->routeExists($url) === false) {
+            return false;
         }
         
         $controller = $this->routes[$url][0];
@@ -32,5 +31,20 @@ class Router
         //temp fix for my wamp server
         $url = str_replace("/recyclePHP/", "", $url);
         return $url;
+    }
+    
+    private function routeExists($url)
+    {
+        //make sure there is a route specified for this url
+        if(array_key_exists($url, $this->routes) === false) {
+            return false;
+        }
+        
+        $class_name = $this->routes[$url][0];
+        if(class_exists($class_name) === false) {
+            return false;
+        }
+        
+        return true;
     }
 }
