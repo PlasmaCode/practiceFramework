@@ -13,4 +13,11 @@ $route = new Router();
 $route->setGet("test", "TestingController", "testMethod");
 $route->setGet("hello", "TestingController", "helloMethod");
 
-var_dump($route->getController($_SERVER['REQUEST_URI']));
+$routeAction = $route->getController($_SERVER['REQUEST_URI']);
+
+if($routeAction === false) {
+    //Note: use 404 error controller here
+    echo "404 error";
+}else {
+    var_dump($routeAction);
+}
